@@ -1,0 +1,19 @@
+---
+- hosts: all
+  roles:
+    - geerlingguy.docker
+  tasks:
+    - name: Ensure common development tools are available
+      yum:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          - vim
+
+- hosts: masters[0]
+  tasks:
+    - name: Initializing swarm cluster
+      docker_swarm:
+              state: present
+
+
