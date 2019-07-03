@@ -30,8 +30,9 @@ Vagrant.configure(2) do |config|
   n_managers = 3
   n_workers = 3
 
-  for i in 1..n_managers
+  (1..n_managers).each do |i|
     config.vm.define "manager#{i}" do |manager|
+      manager.vm.hostname = "manager#{i}"
       manager.vm.provider "virtualbox" do |vb|
         vb.memory = "2048"
         vb.cpus = "2"
@@ -41,6 +42,7 @@ Vagrant.configure(2) do |config|
 
   (1..n_workers).each do |i|
     config.vm.define "worker#{i}" do |worker|
+      worker.vm.hostname = "worker#{i}"
       worker.vm.provider "virtualbox" do |vb|
         vb.memory = "1024"
         vb.cpus = 1
