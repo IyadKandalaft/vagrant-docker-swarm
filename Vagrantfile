@@ -11,13 +11,21 @@ Vagrant.configure(2) do |config|
     }
   end
 
+  config.vm.provider "virtualbox" do |v|
+    v.linked_clone = true
+  end
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
   config.vm.network "private_network",
-    type: "dhcp"
+    type: "dhcp",
+    nic_type: "virtio"
 
   config.vm.network "public_network", 
     use_dhcp_assigned_default_route: true,
     type: "dhcp",
-    bridge: "eth0"
+    nic_type: "virtio",
+    bridge: "wlan0"
 
   n_managers = 3
   n_workers = 3
