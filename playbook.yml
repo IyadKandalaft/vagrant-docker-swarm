@@ -3,17 +3,58 @@
   roles:
     - geerlingguy.docker
   tasks:
-    - name: Ensure common development tools are available
+    - name: Install common development tools
       yum:
         name: "{{ packages }}"
       vars:
         packages:
           - vim
 
-- hosts: masters[0]
+    - name: Download pip installation script
+      get_url: 
+        url: https://bootstrap.pypa.io/get-pip.py
+        dest: /tmp/get-pip.py
+        mode: '0750'
+
+    - name: Install pip using installation script
+      command: python /tmp/get-pip.py
+      args:
+        creates: /usr/bin/pip
+
+    - name: Install required python libraries
+      pip:
+        name: "{{ packages }}"
+      vars:
+        packages:
+          docker
+    
+    - name: Add vagrant to docker group
+      user:
+        name: vagrant
+        groups: docker
+
+- hosts: managers[0]
   tasks:
-    - name: Initializing swarm cluster
+    - name: Initializing swarm cluster leader
       docker_swarm:
-              state: present
+        state: present
+        advertise_addr: eth1
+      register: swarm_leader
 
+- hosts: managers[1:]
+  tasks:
+    - name: Joining remaining masters to swarm cluster
+      docker_swarm:
+        state: join
+        advertise_addr: eth1
+        join_token: "{{ hostvars[groups['managers'][0]].swarm_leader.swarm_facts.JoinTokens.Manager }}"
+        remote_addrs: "{{ hostvars[groups['managers'][0]].ansible_eth1.ipv4.address }}"
 
+- hosts: workers
+  tasks:
+    - name: Joining workers to swarm cluster
+      docker_swarm:
+        state: join
+        advertise_addr: eth1
+        join_token: "{{ hostvars[groups['managers'][0]].swarm_leader.swarm_facts.JoinTokens.Worker }}"
+        remote_addrs: "{{ hostvars[groups['managers'][0]].ansible_eth1.ipv4.address }}"
