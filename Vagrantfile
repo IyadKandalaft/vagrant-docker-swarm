@@ -24,11 +24,21 @@ Vagrant.configure(2) do |config|
 
   for i in 1..n_managers
     config.vm.define "manager#{i}" do |manager|
+      manager.vm.provider "virtualbox" do |vb|
+        vb.memory = "2048"
+        vb.cpus = "2"
+      end
     end
   end
 
   (1..n_workers).each do |i|
     config.vm.define "worker#{i}" do |worker|
+      worker.vm.provider "virtualbox" do |vb|
+        vb.memory = "1024"
+        vb.cpus = 1
+      end
+
+
       if i == 3
         worker.vm.provision :ansible do |ansible|
           ansible.become = true
