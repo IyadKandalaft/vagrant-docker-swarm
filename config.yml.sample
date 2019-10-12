@@ -1,0 +1,24 @@
+# -*- mode: yaml -*-
+# vi: set ft=yaml
+
+box: "centos/7"
+cache-packages: y
+
+swarm:
+  managers:
+    host_prefix: "manager"
+    count: 3
+    cpus: 2
+    memory: 2048
+  workers:
+    host_prefix: "worker"
+    count: 2
+    cpus: 1
+    memory: 1024
+
+networking:
+  private: 
+    nic_type: "virtio"
+  public:
+    nic_type: "virtio"
+    bridge: # Leave empty for prompt
