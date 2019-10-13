@@ -2,3 +2,4 @@
 *.swp
 *.retry
 config.yml
+roles/
