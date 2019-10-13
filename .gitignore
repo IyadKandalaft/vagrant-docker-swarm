@@ -1,0 +1,5 @@
+.vagrant/
+*.swp
+*.retry
+config.yml
+roles/
