@@ -19,6 +19,28 @@ cd vagrant-docker-swarm
 vagrant up
 ```
 
+Check the cluster status
+
+```
+$ vagrant status
+Current machine states:
+
+manager1                  running (virtualbox)
+manager2                  running (virtualbox)
+manager3                  running (virtualbox)
+worker1                   running (virtualbox)
+worker2                   running (virtualbox)
+
+$ vagrant ssh manager1 -c "docker node ls"
+ID                            HOSTNAME            STATUS              AVAILABILITY        MANAGER STATUS      ENGINE VERSION
+k531jw2im004wv39als3f21cd *   manager1            Ready               Active              Leader              19.03.3
+w84vndh5qpb2tscbosuuj60ck     manager2            Ready               Active              Reachable           19.03.3
+whfpbutal5lhl6j3mgwymbb5e     manager3            Ready               Active              Reachable           19.03.3
+noaa61pxhsoqcmtrj4c7fsw32     worker1             Ready               Active                                  19.03.3
+ul6rvlyi0x03iy2z1uersipqa     worker2             Ready               Active                                  19.03.3
+
+```
+
 ### Prerequisites
 
 The following software is required on the machine where vagrant is executed.
@@ -68,7 +90,8 @@ Swarm options are divided into manager and worker options but they are generally
 Two networks are provisioned: a private network for inter-node communication and a public network for external communication.
 
 | Option | Description |
-| nic_type | The provisioner's virtualized hardware driver type.  |
+|--------|-------------|
+| nic\_type | The provisioner's virtualized hardware driver type.  |
 | bridge | Name of the host interface to bridge (use ip link to get dev name).  Leave blank to select on provisioning. |
 
 ## Contributing
