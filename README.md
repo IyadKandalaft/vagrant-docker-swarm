@@ -67,6 +67,15 @@ To alter the default configuration, copy *config.yml.sample* to *config.yml* and
   cp config.yml.sample config.yml
   vim config.yml
 
+If you need to have multiple config.yml files, the set environment variable *VAGRANT_DOCKER_CONF*
+
+  export VAGRANT_DOCKER_CONF=test_config.yml
+  vagrant up
+
+or
+
+  VAGRANT_DOCKER_CONF=test_config.yml vagrant up
+
 ### General Options
 
 | Option | Description |

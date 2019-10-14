@@ -3,7 +3,8 @@
 
 script_path = File.expand_path(File.dirname(__FILE__))
 lib_path = script_path + '/lib'
-conf_path = script_path + '/config.yml'
+
+conf_path = ENV['VAGRANT_DOCKER_CONF'] != nil ? ENV['MY_VAR'] : script_path + '/config.yml'
 sample_path = script_path + '/config.yml.sample'
 
 $LOAD_PATH.unshift(lib_path)
@@ -75,9 +76,4 @@ Vagrant.configure(2) do |config|
       end
     end
   end
-
-  # config.push.define "atlas" do |push|
-  #   push.app = "YOUR_ATLAS_USERNAME/YOUR_APPLICATION_NAME"
-  # end
-
 end
